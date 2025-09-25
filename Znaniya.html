@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>База знаний</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:#0f1115; --card:#171923; --muted:#8b90a1; --text:#e9ecf1; --accent:#8fd3ff; --ring:#2a7fff33;
+  --radius:18px; --shadow:0 6px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.02);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --glow: 0 0 40px rgba(143, 211, 255, 0.1);
+}
+
+body {
+  background: var(--bg);
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  color: var(--text);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated background */
+.bg-pattern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.03;
+  background-image: 
+    radial-gradient(circle at 20% 30%, #8fd3ff 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, #764ba2 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, #667eea 0%, transparent 50%);
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-20px) rotate(1deg); }
+  66% { transform: translateY(10px) rotate(-1deg); }
+}
+
+/* Hero Section */
+.hero {
+  padding: 80px 20px 60px;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(180deg, rgba(143, 211, 255, 0.02) 0%, transparent 100%);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(143, 211, 255, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff 0%, #8fd3ff 50%, #667eea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  animation: glow 3s ease-in-out infinite;
+  position: relative;
+}
+
+@keyframes glow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+.hero .subtitle {
+  font-size: 1.25rem;
+  color: var(--muted);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+.badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 16px !important;
+  background: rgba(143, 211, 255, 0.1) !important;
+  border: 1px solid rgba(143, 211, 255, 0.2) !important;
+  border-radius: 100px !important;
+  font-size: 12px !important;
+  color: var(--accent) !important;
+  animation: pulse-border 2s ease-in-out infinite !important;
+  max-width: 160px !important;
+  white-space: nowrap !important;
+}
+
+@keyframes pulse-border {
+  0%, 100% { border-color: rgba(143, 211, 255, 0.2); }
+  50% { border-color: rgba(143, 211, 255, 0.4); }
+}
+
+.badge svg {
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+  min-height: 12px !important;
+  max-width: 12px !important;
+  max-height: 12px !important;
+  animation: spin 3s linear infinite !important;
+  flex-shrink: 0 !important;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Container */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+  position: relative;
+}
+
+/* Topics Grid */
+.topics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .topics {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.topic-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid #23263a;
+  overflow: hidden;
+  min-height: auto; /* Убираем фиксированную высоту */
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.topic-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.topic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.35), var(--glow);
+}
+
+.topic-card:hover::before {
+  transform: translateX(100%);
+}
+
+.topic-card:focus-within {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.card-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.3s ease;
+}
+
+.card-head:hover {
+  background: rgba(143, 211, 255, 0.02);
+}
+
+.icon-wrap {
+  width: 72px;
+  height: 72px;
+  flex: 0 0 72px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #121421 0%, #1a1d2e 100%);
+  border-radius: 20px;
+  border: 1px solid #21263a;
+  transition: transform .35s ease;
+  position: relative;
+}
+
+.icon-wrap::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--accent), #667eea);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.topic-card:hover .icon-wrap::after {
+  opacity: 0.5;
+}
+
+.head-text { 
+  flex: 1 1 auto; 
+  min-width: 0; 
+}
+
+.title { 
+  font-size: 20px; 
+  font-weight: 600;
+  line-height: 1.2; 
+  margin: 0 0 6px 0;
+}
+
+.hint { 
+  font-size: 13px; 
+  color: var(--muted); 
+  margin-top: 4px;
+}
+
+.chev { 
+  margin-left: auto; 
+  transition: transform .25s ease; 
+  opacity: .6;
+  font-size: 20px;
+}
+
+.card-body { 
+  padding: 0 24px 20px; 
+  overflow: hidden; 
+  height: 0;
+}
+
+.topic-card.open .card-body { 
+  height: auto; 
+}
+
+.topic-card.open .icon-wrap { 
+  transform: translateX(-12px) rotate(-3deg);
+}
+
+.topic-card.open .chev { 
+  transform: rotate(90deg); 
+}
+
+/* Q&A List */
+.qa-list { 
+  list-style: none; 
+  margin: 12px 0 8px; 
+  padding: 0; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px; 
+}
+
+.qa { 
+  border: 1px solid #22263c; 
+  background: #121421; 
+  border-radius: 14px; 
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.qa:hover {
+  border-color: rgba(143, 211, 255, 0.2);
+  background: rgba(143, 211, 255, 0.02);
+}
+
+.q { 
+  width: 100%; 
+  padding: 14px 16px; 
+  background: transparent; 
+  border: 0; 
+  color: inherit; 
+  text-align: left; 
+  cursor: pointer; 
+  position: relative;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.q::after { 
+  content: "+"; 
+  position: absolute; 
+  right: 16px; 
+  top: 50%; 
+  transform: translateY(-50%);
+  font-weight: 700; 
+  color: var(--muted); 
+  transition: all .2s;
+  font-size: 20px;
+}
+
+.q[aria-expanded="true"]::after { 
+  content: "−"; 
+  transform: translateY(-50%) scale(1.1);
+  color: var(--accent);
+}
+
+.a { 
+  padding: 0 16px 14px; 
+  color: #c8cde0; 
+  overflow: hidden; 
+  height: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.q[aria-expanded="true"] + .a { 
+  height: auto; 
+}
+
+.a p { 
+  margin: 12px 0 0; 
+}
+
+.q:focus, .card-head:focus { 
+  outline: 2px solid var(--ring); 
+  outline-offset: 2px; 
+  border-radius: 10px; 
+}
+
+/* Icon animation */
+.icon { 
+  display: block; 
+  width: 48px;
+  height: 48px;
+}
+
+/* Изменяем видимость иконок - теперь они всегда видны */
+.icon path.stroke { 
+  stroke: var(--accent); 
+  stroke-width: 2.4; 
+  fill: none; 
+  stroke-linecap: round; 
+  stroke-linejoin: round; 
+  stroke-dasharray: 320; 
+  stroke-dashoffset: 0; /* Делаем иконки изначально видимыми */
+  transition: stroke-dashoffset 0.7s ease;
+}
+
+.topic-card.open .icon path.stroke { 
+  animation: draw 700ms ease forwards; 
+}
+
+.icon .pulse { 
+  transform-origin: center; 
+  opacity: 0; 
+}
+
+.topic-card.open .icon .pulse { 
+  animation: icon-pulse 600ms ease 120ms 1 forwards; 
+}
+
+/* Анимация обводки при открытии */
+.topic-card:not(.open) .icon path.stroke {
+  stroke-dashoffset: 0;
+}
+
+.topic-card.open .icon path.stroke {
+  stroke-dashoffset: 320;
+  animation: draw-reverse 700ms ease forwards;
+}
+
+@keyframes draw { 
+  to { stroke-dashoffset: 0; } 
+}
+
+@keyframes draw-reverse {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 320; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes icon-pulse { 
+  50% { opacity: .8; transform: scale(1.06); } 
+  100% { opacity: 0; transform: scale(1); } 
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+  font-size: 14px;
+  border-top: 1px solid #23263a;
+  background: rgba(23, 25, 35, 0.5);
+}
+</style>
+</head>
+<body>
+
+<div class="bg-pattern"></div>
+
+<section class="hero">
+  <div class="badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M12 2v10l8.66 5M12 2v10l-8.66 5"/>
+    </svg>
+    <span>База знаний</span>
+  </div>
+  <h1>Какие знания я могу предоставить</h1>
+  <p class="subtitle">Исследуйте различные области науки через интерактивные карточки с вопросами и ответами. От психологии человека до законов физики — всё в одном месте.</p>
+</section>
+
+<div class="container">
+  <div class="topics" role="list">
+    <!-- Психология -->
+    <article class="topic-card" data-topic="psychology" role="listitem">
+      <button class="card-head" type="button" aria-expanded="false">
+        <span class="icon-wrap" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <circle class="pulse" cx="32" cy="32" r="20" fill="#8fd3ff22"/>
+            <path class="stroke" d="M24 18c-4 0-8 3-8 8 0 2 0 4 2 6-2 2-2 4-2 6 0 5 4 8 8 8 2 0 4-1 6-3 1 2 3 3 6 3 4 0 8-3 8-8 0-2 0-4-2-6 2-2 2-4 2-6 0-5-4-8-8-8-3 0-5 1-6 3-2-2-4-3-6-3z"/>
+            <path class="stroke" d="M24 22c2 0 4 1 4 4v3M40 22c-2 0-4 1-4 4v3M24 38c2 0 4-1 4-4v-2M40 38c-2 0-4-1-4-4v-2"/>
+          </svg>
+        </span>
+        <div class="head-text">
+          <h3 class="title">Психология</h3>
+          <div class="hint">Поведение, мышление и эмоции</div>
+        </div>
+        <span class="chev" aria-hidden="true">▸</span>
+      </button>
+      <div class="card-body" hidden>
+        <ul class="qa-list">
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Почему люди общаются?</button>
+            <div class="a"><p>Люди общаются по разным причинам:<br>1) Обмен информацией о мире<br>2) Обмен эмоциями и переживаниями<br>3) Удовлетворение внутренних потребностей в социальной связи</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Стоит ли отвечать на оскорбление?</button>
+            <div class="a"><p>Зависит от ситуации и окружения. Один на один с человеком — не влияет на репутацию. В публичном пространстве важно сохранять достоинство и не опускаться до уровня оскорбителя.</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Как быстрее расположить собеседника?</button>
+            <div class="a"><p>Совмещайте темп и тон речи, задавайте уточняющие вопросы, зеркальте ключевые слова, используйте маленькие сигналы согласия, поддерживайте зрительный контакт.</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Что такое эмоциональный интеллект?</button>
+            <div class="a"><p>Способность понимать свои и чужие эмоции, управлять ими и использовать эту информацию для решения задач. Включает самосознание, саморегуляцию, эмпатию и социальные навыки.</p></div>
+          </li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- Биология -->
+    <article class="topic-card" data-topic="biology" role="listitem">
+      <button class="card-head" type="button" aria-expanded="false">
+        <span class="icon-wrap" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <circle class="pulse" cx="32" cy="32" r="20" fill="#8fd3ff22"/>
+            <path class="stroke" d="M32 16c0 0 8 4 8 12s-8 12-8 12-8-4-8-12 8-12 8-12z"/>
+            <path class="stroke" d="M32 16v24M24 24h16M24 32h16"/>
+            <circle class="stroke" cx="32" cy="48" r="4"/>
+          </svg>
+        </span>
+        <div class="head-text">
+          <h3 class="title">Биология</h3>
+          <div class="hint">Жизнь и живые организмы</div>
+        </div>
+        <span class="chev" aria-hidden="true">▸</span>
+      </button>
+      <div class="card-body" hidden>
+        <ul class="qa-list">
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Зачем нужна кровь?</button>
+            <div class="a"><p>Кровь доставляет кислород из легких в мозг и другие органы. Также переносит питательные вещества, гормоны, удаляет продукты обмена и защищает от инфекций.</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Что такое фотосинтез?</button>
+            <div class="a"><p>Процесс преобразования световой энергии в химическую энергию органических веществ. Растения используют солнечный свет, воду и CO₂ для создания глюкозы и выделения кислорода.</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Как работает иммунитет?</button>
+            <div class="a"><p>Иммунная система защищает организм от патогенов через врожденный и приобретенный иммунитет, используя лейкоциты, антитела и другие механизмы защиты.</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Что такое ДНК?</button>
+            <div class="a"><p>Дезоксирибонуклеиновая кислота — молекула, хранящая генетическую информацию. Состоит из двух спиральных цепей с четырьмя типами нуклеотидов (A, T, G, C).</p></div>
+          </li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- Физика -->
+    <article class="topic-card" data-topic="physics" role="listitem">
+      <button class="card-head" type="button" aria-expanded="false">
+        <span class="icon-wrap" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <circle class="pulse" cx="32" cy="32" r="20" fill="#8fd3ff22"/>
+            <ellipse class="stroke" cx="32" cy="32" rx="20" ry="8"/>
+            <ellipse class="stroke" cx="32" cy="32" rx="8" ry="20"/>
+            <ellipse class="stroke" cx="32" cy="32" rx="14" ry="14" transform="rotate(45 32 32)"/>
+            <circle class="stroke" cx="32" cy="32" r="4"/>
+          </svg>
+        </span>
+        <div class="head-text">
+          <h3 class="title">Физика</h3>
+          <div class="hint">Законы природы и взаимодействия</div>
+        </div>
+        <span class="chev" aria-hidden="true">▸</span>
+      </button>
+      <div class="card-body" hidden>
+        <ul class="qa-list">
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Что такое гравитация?</button>
+            <div class="a"><p>Фундаментальное взаимодействие между всеми материальными телами. Сила притяжения пропорциональна массам тел и обратно пропорциональна квадрату расстояния между ними.</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Как работает электричество?</button>
+            <div class="a"><p>Движение заряженных частиц (электронов) через проводник под действием разности потенциалов. Создает электрический ток, измеряемый в амперах.</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Почему небо голубое?</button>
+            <div class="a"><p>Рэлеевское рассеяние солнечного света в атмосфере. Короткие волны (синий, голубой) рассеиваются сильнее длинных (красный), окрашивая небо в голубой цвет.</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Что такое теория относительности?</button>
+            <div class="a"><p>Теория Эйнштейна о пространстве, времени и гравитации. Показывает, что время и пространство относительны и зависят от скорости движения и гравитационных полей.</p></div>
+          </li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- Химия -->
+    <article class="topic-card" data-topic="chemistry" role="listitem">
+      <button class="card-head" type="button" aria-expanded="false">
+        <span class="icon-wrap" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <circle class="pulse" cx="32" cy="32" r="20" fill="#8fd3ff22"/>
+            <path class="stroke" d="M26 20v8l-6 12c0 4 3 6 6 6h12c3 0 6-2 6-6l-6-12v-8"/>
+            <path class="stroke" d="M24 20h16M28 28h8M26 36h12"/>
+            <circle class="stroke" cx="30" cy="40" r="2"/>
+            <circle class="stroke" cx="36" cy="38" r="1.5"/>
+          </svg>
+        </span>
+        <div class="head-text">
+          <h3 class="title">Химия</h3>
+          <div class="hint">Вещества и их превращения</div>
+        </div>
+        <span class="chev" aria-hidden="true">▸</span>
+      </button>
+      <div class="card-body" hidden>
+        <ul class="qa-list">
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Что такое химическая реакция?</button>
+            <div class="a"><p>Процесс превращения одних веществ в другие с разрывом старых и образованием новых химических связей. Сопровождается изменением энергии системы.</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Как работает pH?</button>
+            <div class="a"><p>Мера кислотности или щелочности раствора. Шкала от 0 до 14: pH < 7 - кислая среда, pH = 7 - нейтральная, pH > 7 - щелочная среда.</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Что такое окисление?</button>
+            <div class="a"><p>Процесс потери электронов атомом или ионом. В быту - реакция с кислородом (ржавление железа, горение). В химии - более широкое понятие электронного переноса.</p></div>
+          </li>
+          <li class="qa">
+            <button class="q" type="button" aria-expanded="false">Что такое катализатор?</button>
+            <div class="a"><p>Вещество, ускоряющее химическую реакцию, но не расходующееся в процессе. Снижает энергию активации реакции, позволяя ей протекать быстрее.</p></div>
+          </li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>© 2025 База знаний. Создано с любовью к обучению.</p>
+</footer>
+
+<script>
+(() => {
+  const cards = document.querySelectorAll('.topic-card');
+
+  const animateHeight = (el, expand, cb) => {
+    el.style.overflow = 'hidden';
+    const start = el.getBoundingClientRect().height;
+    if(expand) el.hidden = false;
+    el.style.height = start + 'px';
+    const end = expand ? el.scrollHeight : 0;
+    requestAnimationFrame(()=> {
+      el.style.transition = 'height 350ms cubic-bezier(0.4, 0, 0.2, 1)';
+      el.style.height = end + 'px';
+    });
+    const done = (e) => {
+      if(e.propertyName !== 'height') return;
+      el.removeEventListener('transitionend', done);
+      el.style.transition = '';
+      el.style.height = expand ? '' : '0px';
+      if(!expand) el.hidden = true;
+      if(cb) cb();
+    };
+    el.addEventListener('transitionend', done);
+  };
+
+  cards.forEach(card => {
+    const head = card.querySelector('.card-head');
+    const body = card.querySelector('.card-body');
+    head.addEventListener('click', () => {
+      const open = card.classList.toggle('open');
+      head.setAttribute('aria-expanded', String(open));
+      animateHeight(body, open);
+    });
+
+    card.querySelectorAll('.qa').forEach(item => {
+      const q = item.querySelector('.q');
+      const a = item.querySelector('.a');
+      q.addEventListener('click', () => {
+        const open = q.getAttribute('aria-expanded') === 'true';
+        q.setAttribute('aria-expanded', String(!open));
+        animateHeight(a, !open);
+      });
+      q.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          q.click();
+        }
+      });
+    });
+  });
+
+  // Smooth entrance animation
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '0';
+        entry.target.style.transform = 'translateY(30px)';
+        setTimeout(() => {
+          entry.target.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }, 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  cards.forEach(card => {
+    observer.observe(card);
+  });
+
+  // Add parallax effect to background pattern
+  let ticking = false;
+  function updateParallax() {
+    const scrolled = window.pageYOffset;
+    const pattern = document.querySelector('.bg-pattern');
+    if (pattern) {
+      pattern.style.transform = `translateY(${scrolled * 0.3}px)`;
+    }
+    ticking = false;
+  }
+
+  function requestTick() {
+    if (!ticking) {
+      requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', requestTick);
+})();
+</script>
