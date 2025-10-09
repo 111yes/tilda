@@ -7,6 +7,10 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html, body {
+  min-height: 100%;
+}
+
 :root {
   --bg: #050714;
   --card: rgba(12, 18, 36, 0.85);
@@ -25,11 +29,7 @@
 }
 
 body {
-  background:
-    radial-gradient(130% 140% at 85% -20%, rgba(255, 137, 229, 0.25) 0%, transparent 65%),
-    radial-gradient(120% 120% at 12% 0%, rgba(118, 242, 255, 0.28) 0%, transparent 60%),
-    linear-gradient(180deg, rgba(6, 10, 28, 0.95) 0%, rgba(5, 7, 20, 0.95) 100%),
-    var(--bg);
+  background: transparent;
   margin: 0;
   min-height: 100vh;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
@@ -38,13 +38,30 @@ body {
   overflow-x: hidden;
 }
 
+body::before {
+  content: '';
+  position: fixed;
+  inset: -10vh;
+  left: 50%;
+  width: 140vw;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(130% 140% at 85% -20%, rgba(255, 137, 229, 0.25) 0%, transparent 65%),
+    radial-gradient(120% 120% at 12% 0%, rgba(118, 242, 255, 0.28) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(6, 10, 28, 0.95) 0%, rgba(5, 7, 20, 0.95) 100%),
+    var(--bg);
+  z-index: -2;
+  pointer-events: none;
+}
+
 /* Animated background */
 .bg-pattern {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: -12vh;
+  bottom: -12vh;
+  left: 50%;
+  width: 150vw;
+  margin-left: -75vw;
   opacity: 0.5;
   background-image:
     radial-gradient(500px circle at 18% 26%, rgba(118, 242, 255, 0.14), transparent 70%),
@@ -72,17 +89,32 @@ body {
 }
 
 /* Hero Section */
+.page {
+  position: relative;
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: clamp(48px, 9vw, 80px) clamp(16px, 4vw, 36px) clamp(90px, 12vw, 140px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 8vw, 72px);
+  z-index: 1;
+}
+
 .hero {
-  padding: clamp(64px, 12vw, 96px) 0 clamp(48px, 10vw, 72px);
-  text-align: center;
+  padding: 0;
+  text-align: center !important;
   position: relative;
   background: linear-gradient(180deg, rgba(118, 242, 255, 0.08) 0%, rgba(123, 108, 255, 0.05) 55%, transparent 100%);
+  border-radius: clamp(26px, 5vw, 32px);
+  overflow: hidden;
 }
 
 .hero-inner {
-  width: min(100%, 1160px);
-  margin: 0 auto;
-  padding: 0 clamp(16px, 4vw, 32px);
+  padding: clamp(48px, 10vw, 92px) clamp(12px, 5vw, 64px) clamp(40px, 8vw, 72px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .hero::before {
@@ -138,6 +170,7 @@ body {
   white-space: nowrap !important;
   box-shadow: 0 14px 35px rgba(118, 242, 255, 0.18);
   backdrop-filter: blur(8px);
+  margin: 0 auto;
 }
 
 @keyframes pulse-border {
@@ -163,9 +196,8 @@ body {
 
 /* Container */
 .container {
-  width: min(100%, 1160px);
+  width: 100%;
   margin: 0 auto;
-  padding: 0 clamp(16px, 4vw, 36px) clamp(72px, 10vw, 110px);
   position: relative;
   backdrop-filter: blur(10px);
 }
@@ -468,50 +500,42 @@ body {
   100% { opacity: 0; transform: scale(1); } 
 }
 
-/* Footer */
-.footer {
-  text-align: center;
-  padding: 46px 20px;
-  color: rgba(244, 247, 255, 0.6);
-  font-size: 14px;
-  border-top: 1px solid var(--border);
-  background: rgba(10, 14, 30, 0.72);
-  backdrop-filter: blur(12px);
-}
 </style>
 </head>
 <body>
 
 <div class="bg-pattern"></div>
 
-<section class="hero">
-  <div class="hero-inner">
-    <div class="badge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M12 2v10l8.66 5M12 2v10l-8.66 5"/>
-      </svg>
-      <span>База знаний</span>
+<main class="page">
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 2v10l8.66 5M12 2v10l-8.66 5"/>
+        </svg>
+        <span>База знаний</span>
+      </div>
+      <h1>Какие знания я могу предоставить</h1>
+      <p class="subtitle">Исследуйте различные области науки через интерактивные карточки с вопросами и ответами. От психологии человека до законов физики — всё в одном месте.</p>
     </div>
-    <h1>Какие знания я могу предоставить</h1>
-    <p class="subtitle">Исследуйте различные области науки через интерактивные карточки с вопросами и ответами. От психологии человека до законов физики — всё в одном месте.</p>
-  </div>
-</section>
+  </section>
 
-<div class="container">
-  <div class="topics" role="list">
+  <div class="container">
+    <div class="topics" role="list">
     <!-- Психология -->
     <article class="topic-card" data-topic="psychology" role="listitem">
       <button class="card-head" type="button" aria-expanded="false">
         <span class="icon-wrap" aria-hidden="true">
           <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
             <circle class="pulse" cx="32" cy="32" r="20" fill="#76f2ff22"/>
-            <path class="stroke" d="M26 18c-3 0-5.6 1.8-6.8 4.6-1.8-.9-4-.9-5.8 0-3.2 1.4-5.3 4.7-5.3 8.3 0 2.2.7 4.2 2 5.9-1.4 1.7-2.2 3.9-2.2 6.2 0 5 3.9 9 8.6 9 1 0 2-.2 2.9-.5 1.2 3.4 4.1 5.7 7.6 5.7 2.3 0 4.5-1 6-2.7 1.5 1.7 3.7 2.7 6 2.7 3.5 0 6.4-2.3 7.6-5.7.9.3 1.9.5 2.9.5 4.7 0 8.6-4 8.6-9 0-2.3-.8-4.5-2.2-6.2 1.3-1.7 2-3.7 2-5.9 0-3.6-2.1-6.9-5.3-8.3-1.8-.9-4-.9-5.8 0-1.2-2.8-3.8-4.6-6.8-4.6-1.7 0-3.3.6-4.6 1.7-1.3-1.1-2.9-1.7-4.6-1.7z"/>
+            <path class="stroke" d="M28 18c-4 0-7.3 3-7.7 6.9-1.1-.7-2.4-1.1-3.8-1.1-4.9 0-8.8 4.2-8.8 9.6 0 2.3.8 4.5 2.1 6.3-1.3 1.7-2.1 3.8-2.1 6.1 0 5.6 4.3 10.1 9.7 10.1 1.1 0 2.3-.2 3.3-.6 1.4 3.6 4.5 6 8.2 6 2.2 0 4.2-.9 5.8-2.5 1.6 1.6 3.6 2.5 5.8 2.5 3.7 0 6.8-2.4 8.2-6 1 .4 2.1.6 3.3.6 5.4 0 9.7-4.5 9.7-10.1 0-2.3-.8-4.4-2.1-6.1 1.3-1.8 2.1-4 2.1-6.3 0-5.4-3.9-9.6-8.8-9.6-1.4 0-2.7.4-3.8 1.1-.4-3.9-3.7-6.9-7.7-6.9-2.2 0-4.3 1-5.9 2.7-1.6-1.7-3.7-2.7-5.9-2.7z"/>
             <path class="stroke" d="M32 22v26"/>
-            <path class="stroke" d="M26 22.5c0-2.6 2.1-4.7 4.7-4.7"/>
-            <path class="stroke" d="M38 22.5c0-2.6-2.1-4.7-4.7-4.7"/>
-            <path class="stroke" d="M24.5 27.5c2.6 0 4.7 2.1 4.7 4.7S27.1 36.5 24.5 36.5H23c-2.5 0-4.5 2-4.5 4.5s2 4.5 4.5 4.5h1.1c2 0 3.7 1.7 3.7 3.7"/>
-            <path class="stroke" d="M39.5 27.5c-2.6 0-4.7 2.1-4.7 4.7s2.1 4.3 4.7 4.3H41c2.5 0 4.5 2 4.5 4.5s-2 4.5-4.5 4.5h-1.1c-2 0-3.7 1.7-3.7 3.7"/>
+            <path class="stroke" d="M27 22c0-2.8 2.2-5 5-5s5 2.2 5 5"/>
+            <path class="stroke" d="M24 27c2.7 0 4.9 2.2 4.9 4.9S26.7 37 24 37h-1c-2.8 0-5 2.2-5 5s2.2 5 5 5h1.3c2.1 0 3.7 1.7 3.7 3.7"/>
+            <path class="stroke" d="M40 27c-2.7 0-4.9 2.2-4.9 4.9S37.3 37 40 37h1c2.8 0 5 2.2 5 5s-2.2 5-5 5h-1.3c-2.1 0-3.7 1.7-3.7 3.7"/>
+            <path class="stroke" d="M24 32c-2.5-1.3-4-3.1-4-5.6"/>
+            <path class="stroke" d="M40 32c2.5-1.3 4-3.1 4-5.6"/>
           </svg>
         </span>
         <div class="head-text">
@@ -533,10 +557,6 @@ body {
           <li class="qa">
             <button class="q" type="button" aria-expanded="false">💬 Почему люди общаются?</button>
             <div class="a"><p>Люди общаются по разным причинам:<br>1. Чтобы обмениваться информацией и координировать действия. (Например: «Завтра не нужно в школу», «Встретимся у ресторана», «Резкое падение давления в баке второй ступени».)<br>2. Чтобы находить людей с похожими интересами и эмоциональными реакциями. (Например: «Ты смотрел это аниме?», «Помнишь тот момент, когда он…».) Обычно нам проще сблизиться с теми, кто смеётся над теми же шутками и разделяет увлечение нашими любимыми произведениями.<br>3. Чтобы удовлетворять внутренние потребности — похвастаться, выразить негодование насчет других, найти романтического партнёра и т. д.<br>Нередко общение сочетает в себе сразу все причины или несколько из них.</p></div>
-          </li>
-          <li class="qa">
-            <button class="q" type="button" aria-expanded="false">🧠 Что делать, если я задыхаюсь от волнения перед разговором?</button>
-            <div class="a"><p>Такое бывает почти со всеми. Возьми паузу, сделай пару глубоких вдохов, а потом проговори то, что собираешься сказать, вслух и медленно. Можно репетировать перед зеркалом или записать себя на голосовые — это помогает привыкнуть к своему голосу. И да, всегда можно честно признаться: «Я сейчас волнуюсь, дай мне секунду» — это снижает градус и тебе, и собеседнику.</p></div>
           </li>
         </ul>
       </div>
@@ -565,10 +585,6 @@ body {
           <li class="qa">
             <button class="q" type="button" aria-expanded="false">🧭 Что такое социальная норма и зачем она нужна?</button>
             <div class="a"><p>Это не обязательно закон, а скорее ожидание большинства «как тут принято». Типа здороваться, не лезть без очереди и не слушать музыку на колонке в автобусе. Благодаря этим правилам мы примерно понимаем, чего ждать друг от друга, и мир не превращается в хаос из личных «хочу».</p></div>
-          </li>
-          <li class="qa">
-            <button class="q" type="button" aria-expanded="false">🏙️ Какие вообще бывают общества?</button>
-            <div class="a"><p>Если очень грубо, то есть три больших версии: традиционное (живём как жили предки, мало технологий), индустриальное (заводы, массовое образование, города) и постиндустриальное (сервисы, IT, куча информации). Чем новее тип, тем легче менять профессию и место жительства.</p></div>
           </li>
           <li class="qa">
             <button class="q" type="button" aria-expanded="false">⚖️ Зачем вообще нужна власть?</button>
@@ -606,10 +622,6 @@ body {
           <li class="qa">
             <button class="q" type="button" aria-expanded="false">🩸 Зачем вообще нужна кровь?</button>
             <div class="a"><p>Представь курьера, который развозит всё важное по городу. Кровь так же возит кислород из лёгких в мозг, доставляет еду для клеток, увозит мусор (продукты обмена) и привозит охрану в виде иммунных клеток, когда начинается драка с микробами.</p></div>
-          </li>
-          <li class="qa">
-            <button class="q" type="button" aria-expanded="false">🌿 Что происходит при фотосинтезе?</button>
-            <div class="a"><p>Растение ловит свет и говорит: «О, бесплатная энергия!» Листья берут воду из почвы, углекислый газ из воздуха, скрещивают всё это в хлоропластах и получают глюкозу. Побочный эффект — кислород, которым мы и дышим.</p></div>
           </li>
           <li class="qa">
             <button class="q" type="button" aria-expanded="false">🛡️ Как организм отбивается от болезней?</button>
@@ -652,10 +664,6 @@ body {
             <div class="a"><p>Это притяжение, из-за которого всё падает вниз, а не вверх. Чем массивнее объект — тем сильнее он тянет. Земля тянет нас, мы тянем Землю, просто наша сила крошечная на её фоне. Формула Ньютонова закона — это уже красиво про числа, но суть простая: чем ближе и тяжелее объекты, тем сильнее они липнут друг к другу.</p></div>
           </li>
           <li class="qa">
-            <button class="q" type="button" aria-expanded="false">⚡ Как работает электричество?</button>
-            <div class="a"><p>В проводе сидит куча электронов. Когда ты включаешь устройство, создаётся разница потенциалов — и электроны начинают двигаться, будто их позвали на бесплатную пиццу. Они тащат энергию к потребителю, а тот превращает её в свет, тепло или звук.</p></div>
-          </li>
-          <li class="qa">
             <button class="q" type="button" aria-expanded="false">🌕 Почему Луна светится?</button>
             <div class="a"><p>Луна сама не светится, на неё светит солнышко,<br>и мы видим её как любой освещённый светом объект:<br>солнечные лучи падают на поверхность Луны, отражаются и попадают к нам в глаз — именно так вообще работает зрение.<br><br>Она кажется особенно необычной, потому что у неё нет фона (висит посреди пустоты как-никак), при этом само Солнце в этот момент не видно — оно находится за Землёй, можно сказать «под нашими ногами» (на другой стороне планеты). Поэтому создаётся ощущение, что Луна светится сама по себе, хотя на самом деле она просто отражает солнечный свет.<br><br>Иногда днём Луну не видно, потому что её свет «забивается» яркостью рассеянного голубого света неба. Но если Луна находится достаточно высоко и Солнце не слишком ослепительно, её вполне можно заметить и днём.</p></div>
           </li>
@@ -667,41 +675,44 @@ body {
       </div>
     </article>
 
-    <!-- Химия -->
-    <article class="topic-card" data-topic="chemistry" role="listitem">
+    <!-- Нейросети -->
+    <article class="topic-card" data-topic="neural" role="listitem">
       <button class="card-head" type="button" aria-expanded="false">
         <span class="icon-wrap" aria-hidden="true">
           <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
             <circle class="pulse" cx="32" cy="32" r="20" fill="#76f2ff22"/>
-            <path class="stroke" d="M26 20v8l-6 12c0 4 3 6 6 6h12c3 0 6-2 6-6l-6-12v-8"/>
-            <path class="stroke" d="M24 20h16M28 28h8M26 36h12"/>
-            <circle class="stroke" cx="30" cy="40" r="2"/>
-            <circle class="stroke" cx="36" cy="38" r="1.5"/>
+            <circle class="stroke" cx="22" cy="24" r="5"/>
+            <circle class="stroke" cx="42" cy="20" r="4"/>
+            <circle class="stroke" cx="24" cy="44" r="4.5"/>
+            <circle class="stroke" cx="44" cy="40" r="5.5"/>
+            <circle class="stroke" cx="32" cy="32" r="4"/>
+            <path class="stroke" d="M26 24h6l6-4"/>
+            <path class="stroke" d="M22 29l4 3"/>
+            <path class="stroke" d="M28 36l2 6"/>
+            <path class="stroke" d="M32 36 41 40"/>
+            <path class="stroke" d="M38 22l6 16"/>
+            <path class="stroke" d="M20 40l-4-6 4-8"/>
           </svg>
         </span>
         <div class="head-text">
-          <h3 class="title">Химия</h3>
-          <div class="hint">Вещества и их превращения</div>
+          <h3 class="title">Нейросети</h3>
+          <div class="hint">Модели ИИ и их возможности</div>
         </div>
         <span class="chev" aria-hidden="true">▸</span>
       </button>
       <div class="card-body" hidden>
         <ul class="qa-list">
           <li class="qa">
-            <button class="q" type="button" aria-expanded="false">🧪 Что такое химическая реакция по-простому?</button>
-            <div class="a"><p>Это когда старые связи между атомами рвутся, а новые собираются. Было тесто — стало печенье. Был железный болт — заржавел. Всегда идёт обмен энергией: что-то нагревается, светится или наоборот забирает тепло.</p></div>
+            <button class="q" type="button" aria-expanded="false">🤖 Что вообще такое нейросеть?</button>
+            <div class="a"><p>Это программа, которая учится на куче примеров угадывать, какое слово, картинку или действие нужно выдать дальше. Она не «думает» как человек, а просто ловит повторяющиеся шаблоны в данных и потом воспроизводит их на новых задачах.</p></div>
           </li>
           <li class="qa">
-            <button class="q" type="button" aria-expanded="false">🧊 Что показывает pH?</button>
-            <div class="a"><p>Это шкала «насколько кислый или мыльный» раствор. 0–6 — кислоты вроде лимонного сока, 7 — чистая вода, 8–14 — щёлочи вроде соды. Измеряем, чтобы понять, безопасно ли это для кожи, зубов или оборудования.</p></div>
+            <button class="q" type="button" aria-expanded="false">🧩 Почему она иногда отвечает ерунду?</button>
+            <div class="a"><p>Потому что у неё нет реального понимания, она просто продолжает текст, который статистически кажется подходящим. Если в данных было мало примеров или запрос двусмысленный, модель заполняет пробелы домыслами, и получается эффект уверенного бреда.</p></div>
           </li>
           <li class="qa">
-            <button class="q" type="button" aria-expanded="false">🔥 Что такое окисление?</button>
-            <div class="a"><p>Любая реакция, где вещество отдаёт электроны. В быту это часто встреча с кислородом: железо ржавеет, яблоко темнеет, свеча горит. В химии термин шире — электроны могут уходить и без кислорода, главное, что кто-то их забрал.</p></div>
-          </li>
-          <li class="qa">
-            <button class="q" type="button" aria-expanded="false">⚙️ Зачем нужен катализатор?</button>
-            <div class="a"><p>Это как модератор, который ускоряет спор, направляя участников. Вещество помогает реакции стартовать с меньшими затратами энергии, но само при этом не расходуется. Без него процесс идёт, но медленно и лениво.</p></div>
+            <button class="q" type="button" aria-expanded="false">⚙️ Как вообще обучают нейросеть?</button>
+            <div class="a"><p>Берут огромный датасет и дают модели задание предсказывать правильный ответ. Она ошибается, получает «тык» в виде функции ошибки и чуть-чуть меняет свои весы. Миллионы таких циклов — и сеть уже прилично угадывает, что нужно пользователю.</p></div>
           </li>
         </ul>
       </div>
@@ -738,10 +749,6 @@ body {
             <div class="a"><p>Считаем выручку и вычитаем все траты. Не только очевидные (сырьё, реклама), но и аренду, сервисы, доставку, налоги, зарплаты. Если остаток положительный — ура, прибыль. Если ноль или минус — нужно или повышать цену, или резать расходы.</p></div>
           </li>
           <li class="qa">
-            <button class="q" type="button" aria-expanded="false">🧮 Зачем считать unit-экономику?</button>
-            <div class="a"><p>Это мини-P&L на одного клиента или одну продажу. Помогает понять, приносит ли каждая сделка деньги после всех затрат. Если на каждом заказе теряешь по сто рублей, масштабирование только ускорит путь к нулю.</p></div>
-          </li>
-          <li class="qa">
             <button class="q" type="button" aria-expanded="false">Где взять денег</button>
             <div class="a"><p>Взять денег можно у других людей (или у компаний, которые эти люди основали).<br>Другие люди обычно готовы отдать деньги в обмен на то, что вы предложите им что-то нужное.<br>Есть проблемка: в детстве/юности у нас обычно нет ничего интересного, кроме как метлой мести.<br>Некоторые, конечно, находят — есть успешные тик-ток-каналы у подростков, например, но в любом случае это исключение.<br>Не стоит забывать о людях, которым вы несомненно нужны и которые вас ценят — это ваши родители. Так что можете поработать на них. 😁</p></div>
           </li>
@@ -751,9 +758,7 @@ body {
   </div>
 </div>
 
-<footer class="footer">
-  <p>© 2025 База знаний. Создано с любовью к обучению.</p>
-</footer>
+</main>
 
 <script>
 (() => {
